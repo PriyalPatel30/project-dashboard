@@ -118,10 +118,10 @@ export function errorMessage(err: unknown, fallback = "Something went wrong. Try
 export function projectRole(project: Project, user: Person | null): Role | null {
   if (!user?.role) return null;
   if (user.role === "admin") return "admin";
+  if (user.role === "viewer") return "viewer";
   const isOwner = project.owner?._id === user._id;
   const entry = project.members.find((m) => m.user._id === user._id);
   if (!isOwner && !entry) return null;
-  if (user.role === "viewer") return "viewer";
   if (user.role === "project_manager" && (isOwner || entry?.role === "project_manager")) return "project_manager";
   return "member";
 }

@@ -18,7 +18,7 @@ export interface Column {
 
 export interface Member {
   user: Person;
-  role: "project_manager" | "member";
+  role: "project_manager" | "member" | "viewer";
 }
 
 export interface Project {

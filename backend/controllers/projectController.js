@@ -52,8 +52,8 @@ export const getProjects = async (req, res) => {
       isDeleted: false,
       $or: [{ owner: req.user._id }, { "members.user": req.user._id }],
     };
-    // Admins can see everything
-    const query = req.user.role === "admin" ? { isDeleted: false } : filter;
+    // Admins and Viewers can view all non-deleted projects (viewers are read-only)
+    const query = ["admin", "viewer"].includes(req.user.role) ? { isDeleted: false } : filter;
 
     const projects = await Project.find(query)
       .populate("owner", "name email avatar")
@@ -216,13 +216,8 @@ export const addMember = async (req, res) => {
         .json({ message: "Only users with the Project Manager role can be made project managers" });
     }
 
-    // Project Manager can choose a Viewer to become a Member
-    if (targetUser.role === "viewer") {
-      targetUser.role = "member";
-      await targetUser.save();
-    }
-
-    project.members.push({ user: userId, role: role === "project_manager" ? "project_manager" : "member" });
+    const memberRole = role === "project_manager" ? "project_manager" : role === "viewer" ? "viewer" : "member";
+    project.members.push({ user: userId, role: memberRole });
     await project.save();
     res.json(project);
   } catch (err) {

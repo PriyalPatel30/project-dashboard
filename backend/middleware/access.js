@@ -16,13 +16,13 @@ import Task from "../models/Task.js";
  */
 export const getProjectRole = (user, project) => {
   if (user.role === "admin") return "admin";
+  if (user.role === "viewer") return "viewer";
 
   const uid = user._id.toString();
   const isOwner = project.owner.toString() === uid;
   const entry = project.members.find((m) => m.user.toString() === uid);
   if (!isOwner && !entry) return null;
 
-  if (user.role === "viewer") return "viewer";
   if (user.role === "project_manager" && (isOwner || entry?.role === "project_manager")) {
     return "project_manager";
   }

@@ -10,7 +10,7 @@ export default function Team() {
   const toast = useToast();
   const [q, setQ] = useState("");
   const [results, setResults] = useState<Person[]>([]);
-  const [role, setRole] = useState<"member" | "project_manager">("member");
+  const [role, setRole] = useState<"member" | "project_manager" | "viewer">("member");
   const memberIds = new Set([project.owner._id, ...project.members.map((m) => m.user._id)]);
 
   useEffect(() => {
@@ -89,6 +89,7 @@ export default function Team() {
             <Select aria-label="Role in this project" value={role} onChange={(e) => setRole(e.target.value as typeof role)}>
               <option value="member">Member</option>
               <option value="project_manager">Project manager</option>
+              <option value="viewer">Viewer (Read-only)</option>
             </Select>
           </div>
           <ul className="mt-3 flex flex-col">

@@ -1,38 +1,145 @@
 import { useAuth } from "@/lib/auth";
-import { Avatar, Button, PageHeader, RoleBadge } from "@/components/ui";
+import { Avatar, Button, PageHeader, RoleBadge, cx } from "@/components/ui";
 import { RoleMatrix } from "@/components/RoleMatrix";
-import { ROLE_SUMMARY } from "@/lib/format";
+import { ROLE_LABEL, ROLE_SUMMARY, canEdit } from "@/lib/format";
+
+const ROLE_COLORS: Record<string, { bg: string; border: string; text: string; icon: string }> = {
+  admin: { bg: "from-purple-50 to-indigo-50", border: "border-purple-200", text: "text-purple-700", icon: "🛡️" },
+  project_manager: { bg: "from-sky-50 to-cyan-50", border: "border-sky-200", text: "text-sky-700", icon: "📋" },
+  member: { bg: "from-emerald-50 to-teal-50", border: "border-emerald-200", text: "text-emerald-700", icon: "👤" },
+  viewer: { bg: "from-slate-50 to-gray-50", border: "border-slate-200", text: "text-slate-600", icon: "👁️" },
+};
 
 export default function Profile() {
   const { user, logout } = useAuth();
   if (!user) return null;
+
+  const role = user.role ?? "viewer";
+  const colors = ROLE_COLORS[role] ?? ROLE_COLORS.viewer;
+  const editable = canEdit(user);
+
   return (
     <>
-      <PageHeader title="Profile" />
-      <section className="max-w-xl rounded-2xl border border-line bg-surface p-6">
-        <div className="flex items-center gap-4">
-          <Avatar person={user} size={64} />
-          <div>
-            <h2 className="text-xl font-semibold">{user.name}</h2>
-            <p className="text-sm text-muted">{user.email}</p>
+      <PageHeader title="Profile" subtitle="Your account details and permissions." />
+
+      <div className="grid gap-6 lg:grid-cols-[1fr_1fr]">
+        {/* Identity card */}
+        <section className="rounded-2xl border border-line bg-surface/90 shadow-2xs backdrop-blur-sm p-6">
+          <div className="flex items-center gap-4">
+            <Avatar person={user} size={64} />
+            <div>
+              <h2 className="text-xl font-bold">{user.name}</h2>
+              <p className="text-sm text-muted">{user.email}</p>
+            </div>
           </div>
-        </div>
-        <dl className="mt-6 divide-y divide-line text-sm">
-          <div className="flex items-center justify-between py-3">
-            <dt className="text-muted">Role</dt>
-            <dd>{user.role && <RoleBadge role={user.role} />}</dd>
+
+          <dl className="mt-6 divide-y divide-line text-sm">
+            <div className="flex items-center justify-between py-3">
+              <dt className="text-muted font-medium">System role</dt>
+              <dd><RoleBadge role={role} /></dd>
+            </div>
+            <div className="flex items-center justify-between py-3">
+              <dt className="text-muted font-medium">Access level</dt>
+              <dd className="text-right max-w-xs">
+                {editable ? (
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 text-xs font-semibold text-emerald-700">
+                    <span className="size-1.5 rounded-full bg-emerald-500" />
+                    Read & Write
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-50 border border-amber-200 px-2.5 py-0.5 text-xs font-semibold text-amber-700">
+                    <span className="size-1.5 rounded-full bg-amber-500" />
+                    Read Only
+                  </span>
+                )}
+              </dd>
+            </div>
+          </dl>
+
+          <div className="mt-6">
+            <Button onClick={logout} variant="ghost" className="text-danger hover:text-danger">Sign out</Button>
           </div>
-          <div className="flex items-center justify-between py-3">
-            <dt className="text-muted">What you can do</dt>
-            <dd className="max-w-xs text-right">
-              {user.role && ROLE_SUMMARY[user.role]}
-            </dd>
+        </section>
+
+        {/* Role summary card */}
+        <section className={cx(
+          "rounded-2xl border bg-gradient-to-br p-6 shadow-2xs",
+          colors.bg, colors.border
+        )}>
+          <div className="flex items-center gap-3 mb-4">
+            <span className="text-2xl">{colors.icon}</span>
+            <div>
+              <h3 className={cx("text-lg font-bold", colors.text)}>{ROLE_LABEL[role]}</h3>
+              <p className="text-sm text-muted">{ROLE_SUMMARY[role]}</p>
+            </div>
           </div>
-        </dl>
-        <div className="mt-6"><Button onClick={logout}>Sign out</Button></div>
-      </section>
-      <h2 className="mt-10 mb-3 text-lg font-semibold">What each role can do</h2>
-      <RoleMatrix current={user.role} />
+
+          <div className="space-y-2.5">
+            {role === "admin" && (
+              <>
+                <PermRow allowed label="Manage all users and assign roles" />
+                <PermRow allowed label="Create, edit, and delete any project" />
+                <PermRow allowed label="Create, edit, and delete any task" />
+                <PermRow allowed label="View all projects and tasks" />
+                <PermRow allowed label="Comment on any task" />
+              </>
+            )}
+            {role === "project_manager" && (
+              <>
+                <PermRow allowed label="Create projects and manage teams" />
+                <PermRow allowed label="Create, assign, edit, and delete tasks" />
+                <PermRow allowed label="Change task status in your projects" />
+                <PermRow allowed label="Comment on tasks in your projects" />
+                <PermRow denied label="Manage user roles (admin only)" />
+              </>
+            )}
+            {role === "member" && (
+              <>
+                <PermRow allowed label="View projects you belong to" />
+                <PermRow allowed label="Update tasks assigned to you" />
+                <PermRow allowed label="Change status of your assigned tasks" />
+                <PermRow allowed label="Comment on tasks in your projects" />
+                <PermRow denied label="Create or delete tasks" />
+                <PermRow denied label="Manage project teams" />
+              </>
+            )}
+            {role === "viewer" && (
+              <>
+                <PermRow allowed label="View projects and tasks you belong to" />
+                <PermRow denied label="Create, edit, or delete anything" />
+                <PermRow denied label="Comment on tasks" />
+                <PermRow denied label="Change task status" />
+              </>
+            )}
+          </div>
+
+          {role === "viewer" && (
+            <p className="mt-4 text-xs text-muted border-t border-line/50 pt-3">
+              💡 Ask an Admin or Project Manager to add you to a project with a higher role.
+            </p>
+          )}
+        </section>
+      </div>
+
+      <h2 className="mt-10 mb-3 text-lg font-bold">Full permissions matrix</h2>
+      <RoleMatrix current={role} />
     </>
+  );
+}
+
+function PermRow({ allowed, label }: { allowed?: boolean; denied?: boolean; label: string }) {
+  return (
+    <div className="flex items-center gap-2.5 text-sm">
+      {allowed ? (
+        <svg viewBox="0 0 20 20" className="size-4 shrink-0 text-emerald-600" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="m4.5 10.5 3.5 3.5 7.5-8" />
+        </svg>
+      ) : (
+        <svg viewBox="0 0 20 20" className="size-4 shrink-0 text-rose-400" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+          <path d="M5 5l10 10M15 5L5 15" />
+        </svg>
+      )}
+      <span className={allowed ? "text-ink" : "text-muted"}>{label}</span>
+    </div>
   );
 }

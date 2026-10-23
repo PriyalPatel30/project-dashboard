@@ -18,39 +18,47 @@ const ROWS: { label: string; values: Record<Role, Cell> }[] = [
   { label: "Change user roles", values: { admin: true, project_manager: false, member: false, viewer: false } },
 ];
 
+const ROLE_ICONS: Record<Role, string> = {
+  admin: "🛡️",
+  project_manager: "📋",
+  member: "👤",
+  viewer: "👁️",
+};
+
 function Mark({ v }: { v: Cell }) {
-  if (typeof v === "string") return <span className="text-xs text-muted">{v}</span>;
+  if (typeof v === "string") return <span className="text-xs text-muted leading-tight">{v}</span>;
   return v ? (
-    <svg viewBox="0 0 20 20" className="mx-auto size-4 text-accent" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" role="img" aria-label="Allowed">
+    <svg viewBox="0 0 20 20" className="mx-auto size-4.5 text-emerald-600" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" role="img" aria-label="Allowed">
       <path d="m4.5 10.5 3.5 3.5 7.5-8" />
     </svg>
   ) : (
-    <span className="text-faint" aria-label="Not allowed">—</span>
+    <span className="text-faint/60" aria-label="Not allowed">—</span>
   );
 }
 
 export function RoleMatrix({ current }: { current?: Role }) {
   return (
-    <div className="overflow-x-auto rounded-2xl border border-line bg-surface">
+    <div className="overflow-x-auto rounded-2xl border border-line bg-surface/90 shadow-2xs backdrop-blur-sm">
       <table className="w-full min-w-[640px] text-left text-sm">
         <caption className="sr-only">What each role can do</caption>
         <thead>
-          <tr className="border-b border-line text-[13px]">
-            <th scope="col" className="px-5 py-3 font-medium text-muted">Permission</th>
+          <tr className="border-b border-line bg-wash/40 text-[13px]">
+            <th scope="col" className="px-5 py-3.5 font-semibold text-muted">Permission</th>
             {ROLES.map((r) => (
-              <th key={r} scope="col" className={cx("px-3 py-3 text-center font-medium", r === current ? "text-accent-strong" : "text-muted")}>
+              <th key={r} scope="col" className={cx("px-3 py-3.5 text-center font-semibold", r === current ? "text-accent-strong" : "text-muted")}>
+                <span className="block text-base leading-none mb-0.5">{ROLE_ICONS[r]}</span>
                 {ROLE_LABEL[r]}
-                {r === current && <span className="block text-[11px] font-normal">You</span>}
+                {r === current && <span className="block text-[11px] font-medium text-accent opacity-80">You</span>}
               </th>
             ))}
           </tr>
         </thead>
         <tbody>
           {ROWS.map((row) => (
-            <tr key={row.label} className="border-b border-line last:border-0">
-              <th scope="row" className="px-5 py-2.5 font-normal">{row.label}</th>
+            <tr key={row.label} className="border-b border-line/70 last:border-0 transition-colors hover:bg-wash/40">
+              <th scope="row" className="px-5 py-3 font-medium text-ink">{row.label}</th>
               {ROLES.map((r) => (
-                <td key={r} className={cx("px-3 py-2.5 text-center", r === current && "bg-accent-wash/50")}>
+                <td key={r} className={cx("px-3 py-3 text-center", r === current && "bg-accent-wash/30")}>
                   <Mark v={row.values[r]} />
                 </td>
               ))}

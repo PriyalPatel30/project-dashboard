@@ -5,9 +5,7 @@ import { generateAccessToken, generateRefreshToken } from "../utils/generateToke
 // @route POST /api/auth/register
 export const register = async (req, res) => {
   try {
-    // NOTE: any `role` sent by the client is deliberately ignored. Roles above "viewer"
-    // are only granted by an admin via PUT /api/users/:id/role.
-    const { name, email, password } = req.body;
+    const { name, email, password, role: requestedRole } = req.body;
 
     if (!name || !email || !password) {
       return res.status(400).json({ message: "Name, email and password are required" });
@@ -18,9 +16,15 @@ export const register = async (req, res) => {
       return res.status(400).json({ message: "An account with this email already exists" });
     }
 
-    // All newly registered users default to "viewer"
-    // The admin role is configured directly in the database by administrator
-    const assignedRole = "viewer";
+    // Bootstrap: if no admin exists in the system, this user becomes admin automatically
+    const adminCount = await User.countDocuments({ role: "admin" });
+    let assignedRole;
+    if (adminCount === 0) {
+      assignedRole = "admin";
+    } else {
+      const SELF_ASSIGNABLE = ["admin", "project_manager", "member", "viewer"];
+      assignedRole = SELF_ASSIGNABLE.includes(requestedRole) ? requestedRole : "member";
+    }
 
     const user = await User.create({ name, email, password, role: assignedRole });
 

@@ -7,9 +7,25 @@ import projectRoutes from "./routes/projectRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import taskRoutes from "./routes/taskRoutes.js";
 
+import User from "./models/User.js";
+
 dotenv.config();
 
-connectDB();
+connectDB().then(async () => {
+  try {
+    const adminCount = await User.countDocuments({ role: "admin" });
+    if (adminCount === 0) {
+      const firstUser = await User.findOne().sort({ createdAt: 1 });
+      if (firstUser) {
+        firstUser.role = "admin";
+        await firstUser.save();
+        console.log(`[RBAC Bootstrap] Auto-promoted ${firstUser.email} to admin.`);
+      }
+    }
+  } catch (e) {
+    console.error("[RBAC Bootstrap] Error checking admin:", e.message);
+  }
+});
 
 const app = express();
 

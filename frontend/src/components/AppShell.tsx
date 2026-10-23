@@ -3,7 +3,7 @@ import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth";
 import { ROLE_LABEL } from "@/lib/format";
-import { Avatar, Logo, PageLoader, cx } from "./ui";
+import { Avatar, Logo, PageLoader, RoleBadge, cx } from "./ui";
 import { ThemePicker } from "./ThemePicker";
 
 const icon = (d: string) => (
@@ -72,7 +72,9 @@ export function AppShell() {
         <Avatar person={user} size={34} />
         <div className="min-w-0 flex-1">
           <p className="truncate text-sm font-semibold">{user.name}</p>
-          <p className="truncate text-xs text-muted">{user.role ? ROLE_LABEL[user.role] : ""}</p>
+          <div className="mt-0.5">
+            <RoleBadge role={user.role ?? "viewer"} />
+          </div>
         </div>
         <button
           type="button"

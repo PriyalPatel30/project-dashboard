@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema(
     role: {
       type: String,
       enum: ["admin", "project_manager", "member", "viewer"],
-      default: "viewer",
+      default: "member",
     },
     avatar: { type: String, default: "" },
     isVerified: { type: Boolean, default: true }, // simplified: no email verification flow wired up yet
