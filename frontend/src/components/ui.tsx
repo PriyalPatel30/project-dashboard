@@ -10,10 +10,10 @@ export const cx = (...a: (string | false | null | undefined)[]) => a.filter(Bool
 
 type Variant = "primary" | "secondary" | "ghost" | "danger";
 const VARIANTS: Record<Variant, string> = {
-  primary: "bg-accent text-white hover:bg-accent-strong disabled:bg-accent/50",
-  secondary: "bg-surface text-ink border border-line hover:bg-wash disabled:text-faint",
-  ghost: "text-muted hover:bg-wash hover:text-ink disabled:text-faint",
-  danger: "bg-danger text-white hover:bg-[#a82532] disabled:bg-danger/50",
+  primary: "bg-accent text-white shadow-xs hover:bg-accent-strong hover:shadow-md hover:shadow-accent/25 active:scale-[0.98] transition-all disabled:opacity-50",
+  secondary: "bg-surface text-ink border border-line hover:bg-wash hover:border-slate-300 shadow-xs transition-all disabled:text-faint",
+  ghost: "text-muted hover:bg-wash hover:text-ink transition-colors disabled:text-faint",
+  danger: "bg-danger text-white shadow-xs hover:bg-rose-600 hover:shadow-md hover:shadow-rose-500/25 active:scale-[0.98] transition-all disabled:opacity-50",
 };
 
 export function buttonClass(variant: Variant = "secondary", size: "sm" | "md" = "md", extra?: string) {
@@ -308,20 +308,29 @@ export function ConfirmModal({
 
 /* ---------- People ---------- */
 
-const AVATAR_TONES = ["#dfe5fb", "#f6e3d3", "#e2f0e4", "#efe1f3", "#f3ecd0", "#d9eef2"];
-const AVATAR_INK = ["#2c3e96", "#8a4a1c", "#1f6a35", "#6a2f7e", "#7a6212", "#17606f"];
+const AVATAR_TONES = [
+  { bg: "#ede9fe", text: "#6d28d9" },
+  { bg: "#e0f2fe", text: "#0369a1" },
+  { bg: "#fce7f3", text: "#be185d" },
+  { bg: "#dcfce7", text: "#15803d" },
+  { bg: "#ffedd5", text: "#c2410c" },
+  { bg: "#fef9c3", text: "#a16207" },
+  { bg: "#ccfbf1", text: "#0f766e" },
+  { bg: "#fae8ff", text: "#86198f" },
+];
 
 export function Avatar({ person, size = 28 }: { person: Pick<Person, "_id" | "name">; size?: number }) {
   const i = useMemo(() => [...person.name].reduce((h, c) => h + c.charCodeAt(0), 0) % AVATAR_TONES.length, [person.name]);
+  const tone = AVATAR_TONES[i];
   return (
     <span
       title={person.name}
-      className="inline-grid shrink-0 place-items-center rounded-full font-semibold ring-2 ring-surface"
+      className="inline-grid shrink-0 place-items-center rounded-full font-semibold ring-2 ring-surface shadow-xs"
       style={{
         width: size,
         height: size,
-        background: AVATAR_TONES[i],
-        color: AVATAR_INK[i],
+        background: tone.bg,
+        color: tone.text,
         fontSize: Math.max(10, size * 0.38),
       }}
     >
@@ -352,29 +361,41 @@ export function AvatarStack({ people, max = 4, size = 26 }: { people: Person[]; 
 
 /* ---------- Badges ---------- */
 
+const PRIORITY_STYLES: Record<Priority, { bg: string; text: string; dot: string; border: string }> = {
+  low: { bg: "bg-slate-50", text: "text-slate-700", dot: "bg-slate-400", border: "border-slate-200" },
+  medium: { bg: "bg-blue-50", text: "text-blue-700", dot: "bg-blue-500", border: "border-blue-200" },
+  high: { bg: "bg-amber-50", text: "text-amber-800", dot: "bg-amber-500", border: "border-amber-200" },
+  critical: { bg: "bg-rose-50", text: "text-rose-700", dot: "bg-rose-500", border: "border-rose-200" },
+};
+
 export function PriorityBadge({ priority }: { priority: Priority }) {
+  const s = PRIORITY_STYLES[priority] || PRIORITY_STYLES.low;
   return (
-    <span className="inline-flex items-center gap-1.5 text-[13px] capitalize text-ink">
-      <span className="size-2 rounded-full" style={{ background: PRIORITY_COLOR[priority] }} aria-hidden />
+    <span className={cx("inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-xs font-medium capitalize", s.bg, s.text, s.border)}>
+      <span className={cx("size-1.5 rounded-full", s.dot)} aria-hidden />
       {priority}
     </span>
   );
 }
 
 const TYPE_TONE: Record<TaskType, string> = {
-  bug: "bg-danger-wash text-danger",
-  feature: "bg-accent-wash text-accent-strong",
-  improvement: "bg-[#e8e4fa] text-[#5a3fb8]",
-  task: "bg-wash text-muted",
+  bug: "bg-rose-50 text-rose-700 border border-rose-200 font-semibold",
+  feature: "bg-indigo-50 text-indigo-700 border border-indigo-200 font-semibold",
+  improvement: "bg-purple-50 text-purple-700 border border-purple-200 font-semibold",
+  task: "bg-sky-50 text-sky-700 border border-sky-200 font-semibold",
 };
 export function TypeBadge({ type }: { type: TaskType }) {
-  return <span className={cx("rounded-md px-1.5 py-0.5 text-xs font-medium capitalize", TYPE_TONE[type])}>{type}</span>;
+  return <span className={cx("rounded-md px-2 py-0.5 text-xs capitalize", TYPE_TONE[type])}>{type}</span>;
 }
 
 export function RoleBadge({ role }: { role: Role }) {
-  const tone =
-    role === "admin" ? "bg-ink text-white" : role === "project_manager" ? "bg-accent-wash text-accent-strong" : "bg-wash text-muted";
-  return <span className={cx("rounded-full px-2.5 py-0.5 text-xs font-medium", tone)}>{ROLE_LABEL[role]}</span>;
+  const tones: Record<Role, string> = {
+    admin: "bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-xs font-semibold",
+    project_manager: "bg-accent-wash text-accent-strong border border-accent/20 font-semibold",
+    member: "bg-sky-50 text-sky-700 border border-sky-200 font-medium",
+    viewer: "bg-slate-100 text-slate-600 border border-slate-200 font-medium",
+  };
+  return <span className={cx("rounded-full px-2.5 py-0.5 text-xs", tones[role] ?? tones.member)}>{ROLE_LABEL[role]}</span>;
 }
 
 export function ReadOnlyNote({ children }: { children?: React.ReactNode }) {
@@ -460,10 +481,20 @@ export function PageHeader({
 
 export function Logo({ size = 26 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 32 32" fill="none" aria-hidden>
-      <ellipse cx="16" cy="16" rx="13" ry="6.5" transform="rotate(-28 16 16)" stroke="#0a7c72" strokeWidth="2.2" />
-      <circle cx="16" cy="16" r="4.6" fill="#181b33" />
-      <circle cx="26.2" cy="10.2" r="2.4" fill="#0a7c72" />
+    <svg width={size} height={size} viewBox="0 0 32 32" fill="none" aria-hidden className="shrink-0 drop-shadow-xs">
+      <defs>
+        <linearGradient id="pulse-grad-1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="var(--color-accent, #6366f1)" />
+          <stop offset="100%" stopColor="#ec4899" />
+        </linearGradient>
+        <linearGradient id="pulse-grad-2" x1="0%" y1="100%" x2="100%" y2="0%">
+          <stop offset="0%" stopColor="#06b6d4" />
+          <stop offset="100%" stopColor="var(--color-accent, #6366f1)" />
+        </linearGradient>
+      </defs>
+      <ellipse cx="16" cy="16" rx="13" ry="6.5" transform="rotate(-28 16 16)" stroke="url(#pulse-grad-1)" strokeWidth="2.5" />
+      <circle cx="16" cy="16" r="4.6" fill="url(#pulse-grad-1)" />
+      <circle cx="26.2" cy="10.2" r="2.8" fill="url(#pulse-grad-2)" />
     </svg>
   );
 }

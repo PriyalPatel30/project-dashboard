@@ -49,7 +49,7 @@ export default function Login() {
         )}
       </Field>
       <label className="flex items-center gap-2 text-sm text-muted">
-        <input type="checkbox" checked={remember} onChange={(e) => setRemember(e.target.checked)} className="size-4 accent-[#0a7c72]" />
+        <input type="checkbox" checked={remember} onChange={(e) => setRemember(e.target.checked)} className="size-4 rounded accent-accent" />
         Keep me signed in on this device
       </label>
       <Button type="submit" variant="primary" loading={busy} disabled={!email || !password}>

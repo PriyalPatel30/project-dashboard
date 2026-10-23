@@ -4,10 +4,10 @@ export const PRIORITIES: Priority[] = ["low", "medium", "high", "critical"];
 export const TYPES: TaskType[] = ["task", "feature", "improvement", "bug"];
 
 export const PRIORITY_COLOR: Record<Priority, string> = {
-  low: "#8A90A8",
-  medium: "#3F6FD8",
-  high: "#E0661A",
-  critical: "#C62F3E",
+  low: "#64748b",
+  medium: "#3b82f6",
+  high: "#f59e0b",
+  critical: "#ef4444",
 };
 
 export const ROLE_LABEL: Record<Role, string> = {
@@ -29,8 +29,8 @@ export function canEdit(user: Person | null): boolean {
   return !!user && user.role !== "viewer";
 }
 
-const STAGE_PALETTE = ["#64708C", "#D98A06", "#7A4FD6"];
-const STAGE_DONE = "#0A7C72";
+const STAGE_PALETTE = ["#6366f1", "#0ea5e9", "#f59e0b", "#ec4899", "#8b5cf6"];
+const STAGE_DONE = "#10b981";
 
 export function sortedColumns(project: Pick<Project, "columns">): Column[] {
   return [...project.columns].sort((a, b) => a.order - b.order);

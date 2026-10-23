@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth";
 import { ROLE_LABEL } from "@/lib/format";
 import { Avatar, Logo, PageLoader, cx } from "./ui";
+import { ThemePicker } from "./ThemePicker";
 
 const icon = (d: string) => (
   <svg viewBox="0 0 20 20" className="size-[18px]" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
@@ -50,8 +51,10 @@ export function AppShell() {
             to={n.href}
             aria-current={active ? "page" : undefined}
             className={cx(
-              "flex h-10 items-center gap-3 rounded-[9px] px-3 text-sm font-medium transition-colors",
-              active ? "bg-accent-wash text-accent-strong" : "text-muted hover:bg-wash hover:text-ink"
+              "flex h-10 items-center gap-3 rounded-xl px-3.5 text-sm font-medium transition-all duration-150",
+              active
+                ? "bg-gradient-to-r from-accent to-accent-strong text-white shadow-sm shadow-accent/25 font-semibold"
+                : "text-muted hover:bg-wash hover:text-ink"
             )}
           >
             {n.icon}
@@ -63,30 +66,33 @@ export function AppShell() {
   );
 
   const account = (
-    <div className="flex items-center gap-3 border-t border-line pt-4">
-      <Avatar person={user} size={34} />
-      <div className="min-w-0 flex-1">
-        <p className="truncate text-sm font-medium">{user.name}</p>
-        <p className="truncate text-xs text-muted">{user.role ? ROLE_LABEL[user.role] : ""}</p>
+    <div className="flex flex-col gap-3 border-t border-line pt-4">
+      <ThemePicker />
+      <div className="flex items-center gap-3">
+        <Avatar person={user} size={34} />
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-sm font-semibold">{user.name}</p>
+          <p className="truncate text-xs text-muted">{user.role ? ROLE_LABEL[user.role] : ""}</p>
+        </div>
+        <button
+          type="button"
+          onClick={logout}
+          className="rounded-lg px-2 py-1 text-xs font-medium text-muted hover:bg-wash hover:text-ink transition-colors"
+        >
+          Sign out
+        </button>
       </div>
-      <button
-        type="button"
-        onClick={logout}
-        className="rounded-lg px-2 py-1 text-xs font-medium text-muted hover:bg-wash hover:text-ink"
-      >
-        Sign out
-      </button>
     </div>
   );
 
   return (
-    <div className="min-h-screen lg:grid lg:grid-cols-[240px_1fr]">
+    <div className="min-h-screen lg:grid lg:grid-cols-[250px_1fr]">
       {/* desktop rail */}
-      <aside className="sticky top-0 hidden h-screen flex-col justify-between border-r border-line bg-surface p-4 lg:flex">
-        <div className="flex flex-col gap-8">
-          <Link to="/dashboard" className="flex items-center gap-2.5 px-2 pt-1">
-            <Logo />
-            <span className="font-display text-xl font-semibold tracking-tight">Pulse</span>
+      <aside className="sticky top-0 hidden h-screen flex-col justify-between border-r border-line bg-surface/90 backdrop-blur-md p-4 lg:flex shadow-2xs">
+        <div className="flex flex-col gap-7">
+          <Link to="/dashboard" className="flex items-center gap-2.5 px-2 pt-1 group">
+            <Logo size={28} />
+            <span className="font-display text-xl font-bold tracking-tight bg-gradient-to-r from-ink via-ink to-accent bg-clip-text text-transparent group-hover:to-pink-500 transition-all">Pulse</span>
           </Link>
           {nav}
         </div>
@@ -94,17 +100,17 @@ export function AppShell() {
       </aside>
 
       {/* mobile bar */}
-      <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-line bg-surface px-4 lg:hidden">
+      <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-line bg-surface/90 backdrop-blur-md px-4 lg:hidden">
         <Link to="/dashboard" className="flex items-center gap-2">
           <Logo size={24} />
-          <span className="font-display text-lg font-semibold">Pulse</span>
+          <span className="font-display text-lg font-bold tracking-tight">Pulse</span>
         </Link>
         <button
           type="button"
           aria-label="Open menu"
           aria-expanded={open}
           onClick={() => setOpen(true)}
-          className="grid size-9 place-items-center rounded-lg hover:bg-wash"
+          className="grid size-9 place-items-center rounded-lg hover:bg-wash transition-colors"
         >
           <svg viewBox="0 0 20 20" className="size-5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
             <path d="M3 6h14M3 10h14M3 14h14" />
@@ -113,12 +119,12 @@ export function AppShell() {
       </header>
       {open && (
         <div className="fixed inset-0 z-40 lg:hidden">
-          <div className="absolute inset-0 bg-ink/40" onClick={() => setOpen(false)} aria-hidden />
-          <aside className="pop-in absolute inset-y-0 left-0 flex w-72 flex-col justify-between bg-surface p-4">
-            <div className="flex flex-col gap-8">
+          <div className="absolute inset-0 bg-ink/40 backdrop-blur-xs" onClick={() => setOpen(false)} aria-hidden />
+          <aside className="pop-in absolute inset-y-0 left-0 flex w-72 flex-col justify-between bg-surface p-4 shadow-2xl">
+            <div className="flex flex-col gap-7">
               <div className="flex items-center gap-2.5 px-2 pt-1">
-                <Logo />
-                <span className="font-display text-xl font-semibold">Pulse</span>
+                <Logo size={28} />
+                <span className="font-display text-xl font-bold tracking-tight">Pulse</span>
               </div>
               {nav}
             </div>
@@ -128,7 +134,8 @@ export function AppShell() {
       )}
 
       <main className="min-w-0 px-4 py-6 sm:px-8 sm:py-8">
-        <div className="mx-auto w-full max-w-[1280px]"><Outlet />
+        <div className="mx-auto w-full max-w-[1280px]">
+          <Outlet />
         </div>
       </main>
     </div>

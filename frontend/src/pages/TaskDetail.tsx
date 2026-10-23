@@ -95,15 +95,15 @@ export default function TaskDetail() {
               {task.subtasks.length > 0 && <span className="text-sm text-muted">{subDone} of {task.subtasks.length} done</span>}
             </div>
             {task.subtasks.length > 0 && (
-              <div className="mb-3 h-1.5 overflow-hidden rounded-full bg-wash">
-                <div className="h-full bg-accent transition-[width]" style={{ width: `${(subDone / task.subtasks.length) * 100}%` }} />
+              <div className="mb-3 h-2 overflow-hidden rounded-full bg-wash">
+                <div className="h-full rounded-full bg-gradient-to-r from-accent to-emerald-500 transition-[width] duration-300" style={{ width: `${(subDone / task.subtasks.length) * 100}%` }} />
               </div>
             )}
             <ul>
               {task.subtasks.map((s) => (
                 <li key={s._id}>
-                  <label className="flex cursor-pointer items-center gap-3 rounded-lg px-1 py-1.5 text-sm hover:bg-paper">
-                    <input type="checkbox" checked={s.done} disabled={!work} onChange={() => act(() => api.put(`${base}/subtasks/${s._id}`, { version: task.version }))} className="size-4 accent-[#0a7c72]" />
+                  <label className="flex cursor-pointer items-center gap-3 rounded-lg px-2 py-1.5 text-sm hover:bg-wash transition-colors">
+                    <input type="checkbox" checked={s.done} disabled={!work} onChange={() => act(() => api.put(`${base}/subtasks/${s._id}`, { version: task.version }))} className="size-4 rounded accent-accent" />
                     <span className={cx(s.done && "text-muted line-through")}>{s.title}</span>
                   </label>
                 </li>

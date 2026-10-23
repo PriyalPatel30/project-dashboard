@@ -44,8 +44,8 @@ export default function ProjectLayout() {
 
   const tab = ({ isActive }: { isActive: boolean }) =>
     cx(
-      "relative px-1 pb-3 text-sm font-medium transition-colors",
-      isActive ? "text-ink after:absolute after:inset-x-0 after:-bottom-px after:h-0.5 after:bg-accent" : "text-muted hover:text-ink"
+      "relative px-1 pb-3 text-sm font-semibold transition-all duration-150",
+      isActive ? "text-accent after:absolute after:inset-x-0 after:-bottom-px after:h-[2.5px] after:bg-accent after:rounded-full" : "text-muted hover:text-ink"
     );
 
   const dates = [project.startDate && formatDate(project.startDate), project.endDate && formatDate(project.endDate)].filter(Boolean);

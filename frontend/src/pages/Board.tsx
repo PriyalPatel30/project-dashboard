@@ -5,7 +5,7 @@ import { CONFLICT_TOAST, PRIORITIES, canEdit, canManageTasks, canWorkOnTask, con
 import { useProject } from "@/lib/projectContext";
 import type { Priority, Task } from "@/lib/types";
 import { useFetch } from "@/lib/useFetch";
-import { Button, ErrorNote, Input, PageLoader, ReadOnlyNote, Select, StageBar, StageDot, useToast } from "@/components/ui";
+import { Button, ErrorNote, Input, PageLoader, ReadOnlyNote, Select, StageBar, StageDot, cx, useToast } from "@/components/ui";
 import { TaskCard } from "@/components/TaskCard";
 import { TaskForm } from "@/components/TaskForm";
 
@@ -106,17 +106,33 @@ export default function Board() {
                   if (dragId) move(dragId, c.id);
                   setDragId(null);
                 }}
-                className={`flex min-h-64 flex-col rounded-2xl p-2.5 transition-colors ${overCol === c.id ? "bg-accent-wash" : "bg-wash/70"}`}
+                className={cx(
+                  "flex min-h-72 flex-col rounded-2xl p-3 transition-all duration-150 border",
+                  overCol === c.id
+                    ? "border-accent bg-accent-wash/70 ring-2 ring-accent/20"
+                    : "border-line/70 bg-wash/50"
+                )}
               >
                 <header className="flex items-center justify-between px-1.5 pt-1 pb-3">
-                  <h2 className="flex items-center gap-2 font-display text-[15px] font-semibold">
+                  <h2 className="flex items-center gap-2 font-display text-[15px] font-bold text-ink">
                     <StageDot index={i} total={cols.length} />
                     {c.name}
-                    <span className="text-sm font-normal text-muted">{total}</span>
+                    <span className="rounded-full bg-surface px-2 py-0.5 text-xs font-semibold text-muted shadow-2xs border border-line/60">
+                      {total}
+                    </span>
                   </h2>
-                  {manage && <button type="button" aria-label={`Add task to ${c.name}`} onClick={() => setQuick({ col: c.id, title: "" })} className="grid size-7 place-items-center rounded-lg text-muted hover:bg-surface hover:text-ink">
-                    <svg viewBox="0 0 20 20" className="size-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M10 4v12M4 10h12" /></svg>
-                  </button>}
+                  {manage && (
+                    <button
+                      type="button"
+                      aria-label={`Add task to ${c.name}`}
+                      onClick={() => setQuick({ col: c.id, title: "" })}
+                      className="grid size-7 place-items-center rounded-lg text-muted hover:bg-surface hover:text-accent transition-colors shadow-2xs"
+                    >
+                      <svg viewBox="0 0 20 20" className="size-4" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
+                        <path d="M10 4v12M4 10h12" />
+                      </svg>
+                    </button>
+                  )}
                 </header>
                 <div className="flex flex-1 flex-col gap-2">
                   {quick?.col === c.id && (

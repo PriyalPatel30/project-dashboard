@@ -48,7 +48,7 @@ export default function Projects() {
       <div className="mb-5 flex flex-wrap items-center gap-4">
         <Input type="search" aria-label="Search projects" placeholder="Search projects" value={query} onChange={(e) => setQuery(e.target.value)} className="max-w-xs" />
         <label className="flex items-center gap-2 text-sm text-muted">
-          <input type="checkbox" checked={showArchived} onChange={(e) => setShowArchived(e.target.checked)} className="size-4 accent-[#0a7c72]" />
+          <input type="checkbox" checked={showArchived} onChange={(e) => setShowArchived(e.target.checked)} className="size-4 rounded accent-accent" />
           Show archived
         </label>
       </div>
@@ -62,27 +62,52 @@ export default function Projects() {
           action={!data?.length && canCreate ? <Button variant="primary" onClick={() => setCreating(true)}>New project</Button> : undefined}
         />
       )}
-      <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+      <ul className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
         {rows.map(({ project, tasks }) => {
           const last = project.columns[project.columns.length - 1];
           const done = last ? tasks.filter((t) => t.columnId === [...project.columns].sort((a, b) => a.order - b.order).at(-1)!.id).length : 0;
           return (
             <li key={project._id}>
-              <Link to={`/projects/${project._id}`} className="flex h-full flex-col gap-4 rounded-2xl border border-line bg-surface p-5 transition-colors hover:border-[#c0c4dc]">
+              <Link
+                to={`/projects/${project._id}`}
+                className="card-elevated group relative flex h-full flex-col gap-4 overflow-hidden rounded-2xl border border-line bg-surface/90 p-5 shadow-2xs backdrop-blur-sm transition-all hover:border-accent/40"
+              >
+                <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-accent via-purple-500 to-pink-500 opacity-70 group-hover:opacity-100 transition-opacity" />
                 <div>
                   <div className="flex items-start justify-between gap-2">
-                    <h2 className="text-lg leading-snug font-semibold">{project.name}</h2>
-                    {project.isArchived && <span className="rounded-full bg-amber-wash px-2 py-0.5 text-xs font-medium text-[#8a5a00]">Archived</span>}
+                    <h2 className="text-lg leading-snug font-bold text-ink transition-colors group-hover:text-accent">
+                      {project.name}
+                    </h2>
+                    {project.isArchived && (
+                      <span className="rounded-full bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-800 border border-amber-200">
+                        Archived
+                      </span>
+                    )}
                   </div>
-                  <p className="clamp-2 mt-1 min-h-10 text-sm text-muted">{project.description || "No description yet."}</p>
+                  <p className="clamp-2 mt-1 min-h-10 text-sm text-muted">
+                    {project.description || "No description yet."}
+                  </p>
                 </div>
                 <div>
-                  <StageBar columns={project.columns} tasks={tasks} />
-                  <p className="mt-2 text-xs text-muted">{tasks.length === 0 ? "No tasks yet" : `${done} of ${tasks.length} tasks done`}</p>
+                  <StageBar columns={project.columns} tasks={tasks} height={6} />
+                  <div className="mt-2.5 flex items-center justify-between text-xs">
+                    <span className="text-muted">
+                      {tasks.length === 0 ? "No tasks yet" : `${done} of ${tasks.length} completed`}
+                    </span>
+                    {tasks.length > 0 && (
+                      <span className="rounded bg-accent-wash px-1.5 py-0.5 text-[11px] font-semibold text-accent-strong">
+                        {Math.round((done / tasks.length) * 100)}%
+                      </span>
+                    )}
+                  </div>
                 </div>
-                <div className="mt-auto flex items-center justify-between">
+                <div className="mt-auto flex items-center justify-between pt-2 border-t border-line/50">
                   <AvatarStack people={projectPeople(project)} />
-                  {project.endDate && <span className="text-xs text-muted">Ends {formatDate(project.endDate)}</span>}
+                  {project.endDate && (
+                    <span className="text-xs font-medium text-muted">
+                      Ends {formatDate(project.endDate)}
+                    </span>
+                  )}
                 </div>
               </Link>
             </li>
