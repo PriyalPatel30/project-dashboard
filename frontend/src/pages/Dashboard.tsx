@@ -65,10 +65,10 @@ export default function Dashboard() {
 
       {/* Colorful KPI Stat Cards */}
       <div className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <div className="card-elevated rounded-2xl border border-indigo-100 bg-gradient-to-br from-indigo-50/70 to-white p-4.5 shadow-2xs">
+        <div className="card-elevated rounded-2xl border border-indigo-900/40 bg-gradient-to-br from-indigo-950/40 to-surface p-4.5 shadow-2xs">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-indigo-700/80">Assigned</span>
-            <span className="grid size-8 place-items-center rounded-xl bg-indigo-500/10 text-indigo-600">
+            <span className="text-xs font-semibold uppercase tracking-wider text-indigo-400">Assigned</span>
+            <span className="grid size-8 place-items-center rounded-xl bg-indigo-500/15 text-indigo-400">
               <svg viewBox="0 0 20 20" className="size-4.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M9 5H7a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 1 2-2h0a2 2 0 0 1 2 2v0a2 2 0 0 1-2 2H11a2 2 0 0 1-2-2Z" />
               </svg>
@@ -78,10 +78,10 @@ export default function Dashboard() {
           <p className="text-xs text-muted">Open tasks for you</p>
         </div>
 
-        <div className="card-elevated rounded-2xl border border-amber-100 bg-gradient-to-br from-amber-50/70 to-white p-4.5 shadow-2xs">
+        <div className="card-elevated rounded-2xl border border-amber-900/40 bg-gradient-to-br from-amber-950/40 to-surface p-4.5 shadow-2xs">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-amber-700/80">Due Soon</span>
-            <span className="grid size-8 place-items-center rounded-xl bg-amber-500/10 text-amber-600">
+            <span className="text-xs font-semibold uppercase tracking-wider text-amber-400">Due Soon</span>
+            <span className="grid size-8 place-items-center rounded-xl bg-amber-500/15 text-amber-400">
               <svg viewBox="0 0 20 20" className="size-4.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="10" cy="10" r="7" />
                 <path d="M10 6v4l2.5 1.5" />
@@ -92,23 +92,23 @@ export default function Dashboard() {
           <p className="text-xs text-muted">Due in next 7 days</p>
         </div>
 
-        <div className="card-elevated rounded-2xl border border-rose-100 bg-gradient-to-br from-rose-50/70 to-white p-4.5 shadow-2xs">
+        <div className="card-elevated rounded-2xl border border-rose-900/40 bg-gradient-to-br from-rose-950/40 to-surface p-4.5 shadow-2xs">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-rose-700/80">Overdue</span>
-            <span className="grid size-8 place-items-center rounded-xl bg-rose-500/10 text-rose-600">
+            <span className="text-xs font-semibold uppercase tracking-wider text-rose-400">Overdue</span>
+            <span className="grid size-8 place-items-center rounded-xl bg-rose-500/15 text-rose-400">
               <svg viewBox="0 0 20 20" className="size-4.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M10 3 2 17h16L10 3ZM10 9v4M10 15h.01" />
               </svg>
             </span>
           </div>
-          <p className={cx("mt-3 text-2xl font-bold tracking-tight", overdue > 0 ? "text-rose-600" : "text-ink")}>{overdue}</p>
+          <p className={cx("mt-3 text-2xl font-bold tracking-tight", overdue > 0 ? "text-rose-400" : "text-ink")}>{overdue}</p>
           <p className="text-xs text-muted">Requires attention</p>
         </div>
 
-        <div className="card-elevated rounded-2xl border border-emerald-100 bg-gradient-to-br from-emerald-50/70 to-white p-4.5 shadow-2xs">
+        <div className="card-elevated rounded-2xl border border-emerald-900/40 bg-gradient-to-br from-emerald-950/40 to-surface p-4.5 shadow-2xs">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-emerald-700/80">Projects</span>
-            <span className="grid size-8 place-items-center rounded-xl bg-emerald-500/10 text-emerald-600">
+            <span className="text-xs font-semibold uppercase tracking-wider text-emerald-400">Projects</span>
+            <span className="grid size-8 place-items-center rounded-xl bg-emerald-500/15 text-emerald-400">
               <svg viewBox="0 0 20 20" className="size-4.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M3 6a1 1 0 0 1 1-1h4l1.5 2H16a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6Z" />
               </svg>

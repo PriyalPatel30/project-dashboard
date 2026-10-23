@@ -30,6 +30,7 @@ export function getStoredTheme(): ThemeName {
 export function applyTheme(theme: ThemeName) {
   if (typeof document === "undefined") return;
   document.documentElement.setAttribute("data-theme", theme);
+  document.documentElement.classList.add("dark");
   localStorage.setItem(STORAGE_KEY, theme);
 }
 

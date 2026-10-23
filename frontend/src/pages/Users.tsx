@@ -69,10 +69,10 @@ export default function Users() {
         <div className="mb-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
           {ROLE_ORDER.map((r) => {
             const colors: Record<Role, { bg: string; border: string; icon: string; text: string }> = {
-              admin: { bg: "from-purple-50/70 to-white", border: "border-purple-100", icon: "🛡️", text: "text-purple-700" },
-              project_manager: { bg: "from-sky-50/70 to-white", border: "border-sky-100", icon: "📋", text: "text-sky-700" },
-              member: { bg: "from-emerald-50/70 to-white", border: "border-emerald-100", icon: "👤", text: "text-emerald-700" },
-              viewer: { bg: "from-slate-50/70 to-white", border: "border-slate-100", icon: "👁️", text: "text-slate-600" },
+              admin: { bg: "from-purple-950/40 to-surface", border: "border-purple-800/40", icon: "🛡️", text: "text-purple-300" },
+              project_manager: { bg: "from-sky-950/40 to-surface", border: "border-sky-800/40", icon: "📋", text: "text-sky-300" },
+              member: { bg: "from-emerald-950/40 to-surface", border: "border-emerald-800/40", icon: "👤", text: "text-emerald-300" },
+              viewer: { bg: "from-slate-900/60 to-surface", border: "border-slate-800/40", icon: "👁️", text: "text-slate-300" },
             };
             const c = colors[r];
             return (

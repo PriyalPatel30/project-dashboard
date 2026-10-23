@@ -79,7 +79,7 @@ export function ThemePicker({ compact = false }: { compact?: boolean }) {
             onClick={() => setTheme(t.id as ThemeName)}
             className={cx(
               "relative grid size-6 place-items-center rounded-full transition-transform hover:scale-110",
-              theme === t.id ? "ring-2 ring-accent ring-offset-2 scale-110" : "opacity-80 hover:opacity-100"
+              theme === t.id ? "ring-2 ring-accent ring-offset-2 ring-offset-surface scale-110" : "opacity-80 hover:opacity-100"
             )}
             style={{ backgroundColor: t.color }}
           >

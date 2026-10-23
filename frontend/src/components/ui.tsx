@@ -73,7 +73,7 @@ export function LinkButton({
 /* ---------- Form fields ---------- */
 
 const fieldBase =
-  "rounded-[9px] border border-line bg-surface px-3 text-sm text-ink placeholder:text-faint transition-colors hover:border-[#c9cce0] focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 disabled:bg-wash disabled:text-faint";
+  "rounded-[9px] border border-line bg-surface px-3 text-sm text-ink placeholder:text-faint transition-colors hover:border-line-strong focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 disabled:bg-wash disabled:text-faint";
 
 export function Field({
   label,
@@ -157,7 +157,7 @@ export function EmptyState({
   action?: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-col items-center gap-2 rounded-2xl border border-dashed border-[#c9cce0] px-6 py-14 text-center">
+    <div className="flex flex-col items-center gap-2 rounded-2xl border border-dashed border-line-strong px-6 py-14 text-center">
       <h3 className="text-lg font-semibold">{title}</h3>
       {body && <p className="max-w-sm text-sm text-muted">{body}</p>}
       {action && <div className="mt-3">{action}</div>}
@@ -362,10 +362,10 @@ export function AvatarStack({ people, max = 4, size = 26 }: { people: Person[]; 
 /* ---------- Badges ---------- */
 
 const PRIORITY_STYLES: Record<Priority, { bg: string; text: string; dot: string; border: string }> = {
-  low: { bg: "bg-slate-50", text: "text-slate-700", dot: "bg-slate-400", border: "border-slate-200" },
-  medium: { bg: "bg-blue-50", text: "text-blue-700", dot: "bg-blue-500", border: "border-blue-200" },
-  high: { bg: "bg-amber-50", text: "text-amber-800", dot: "bg-amber-500", border: "border-amber-200" },
-  critical: { bg: "bg-rose-50", text: "text-rose-700", dot: "bg-rose-500", border: "border-rose-200" },
+  low: { bg: "bg-slate-800/60", text: "text-slate-300", dot: "bg-slate-400", border: "border-slate-700/60" },
+  medium: { bg: "bg-blue-950/60", text: "text-blue-300", dot: "bg-blue-400", border: "border-blue-800/60" },
+  high: { bg: "bg-amber-950/60", text: "text-amber-300", dot: "bg-amber-400", border: "border-amber-800/60" },
+  critical: { bg: "bg-rose-950/60", text: "text-rose-300", dot: "bg-rose-400", border: "border-rose-800/60" },
 };
 
 export function PriorityBadge({ priority }: { priority: Priority }) {
@@ -379,10 +379,10 @@ export function PriorityBadge({ priority }: { priority: Priority }) {
 }
 
 const TYPE_TONE: Record<TaskType, string> = {
-  bug: "bg-rose-50 text-rose-700 border border-rose-200 font-semibold",
-  feature: "bg-indigo-50 text-indigo-700 border border-indigo-200 font-semibold",
-  improvement: "bg-purple-50 text-purple-700 border border-purple-200 font-semibold",
-  task: "bg-sky-50 text-sky-700 border border-sky-200 font-semibold",
+  bug: "bg-rose-950/60 text-rose-300 border border-rose-800/60 font-semibold",
+  feature: "bg-indigo-950/60 text-indigo-300 border border-indigo-800/60 font-semibold",
+  improvement: "bg-purple-950/60 text-purple-300 border border-purple-800/60 font-semibold",
+  task: "bg-sky-950/60 text-sky-300 border border-sky-800/60 font-semibold",
 };
 export function TypeBadge({ type }: { type: TaskType }) {
   return <span className={cx("rounded-md px-2 py-0.5 text-xs capitalize", TYPE_TONE[type])}>{type}</span>;
@@ -391,16 +391,16 @@ export function TypeBadge({ type }: { type: TaskType }) {
 export function RoleBadge({ role }: { role: Role }) {
   const tones: Record<Role, string> = {
     admin: "bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-xs font-semibold",
-    project_manager: "bg-accent-wash text-accent-strong border border-accent/20 font-semibold",
-    member: "bg-sky-50 text-sky-700 border border-sky-200 font-medium",
-    viewer: "bg-slate-100 text-slate-600 border border-slate-200 font-medium",
+    project_manager: "bg-accent-wash text-accent-strong border border-accent/30 font-semibold",
+    member: "bg-sky-950/70 text-sky-300 border border-sky-800/60 font-medium",
+    viewer: "bg-slate-800/70 text-slate-300 border border-slate-700/60 font-medium",
   };
   return <span className={cx("rounded-full px-2.5 py-0.5 text-xs", tones[role] ?? tones.member)}>{ROLE_LABEL[role]}</span>;
 }
 
 export function ReadOnlyNote({ children }: { children?: React.ReactNode }) {
   return (
-    <p role="note" className="mb-4 rounded-xl bg-amber-wash px-4 py-2.5 text-sm text-[#7a5200]">
+    <p role="note" className="mb-4 rounded-xl bg-amber-950/40 border border-amber-800/50 px-4 py-2.5 text-sm text-amber-300">
       {children ?? "You have view-only access. You can read projects and tasks but not change them."}
     </p>
   );

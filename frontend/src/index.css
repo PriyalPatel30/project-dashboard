@@ -2,61 +2,64 @@
 @import "@fontsource-variable/bricolage-grotesque";
 @import "@fontsource-variable/instrument-sans";
 
-:root {
-  --paper: #f8fafc;
-  --surface: #ffffff;
-  --ink: #0f172a;
-  --muted: #64748b;
-  --faint: #94a3b8;
-  --line: #e2e8f0;
-  --wash: #f1f5f9;
+:root,
+.dark {
+  --paper: #090d16;
+  --surface: #0f172a;
+  --surface-hover: #1e293b;
+  --ink: #f8fafc;
+  --muted: #94a3b8;
+  --faint: #64748b;
+  --line: #1e293b;
+  --line-strong: #334155;
+  --wash: #141e33;
   --accent: #6366f1;
-  --accent-strong: #4f46e5;
-  --accent-wash: #eef2ff;
-  --accent-glow: rgba(99, 102, 241, 0.25);
-  color-scheme: light;
+  --accent-strong: #818cf8;
+  --accent-wash: rgba(99, 102, 241, 0.18);
+  --accent-glow: rgba(99, 102, 241, 0.35);
+  color-scheme: dark;
 }
 
 [data-theme="indigo"] {
-  --accent: #6366f1;
-  --accent-strong: #4f46e5;
-  --accent-wash: #eef2ff;
-  --accent-glow: rgba(99, 102, 241, 0.25);
+  --accent: #818cf8;
+  --accent-strong: #a5b4fc;
+  --accent-wash: rgba(129, 140, 248, 0.18);
+  --accent-glow: rgba(129, 140, 248, 0.35);
 }
 
 [data-theme="violet"] {
-  --accent: #7c3aed;
-  --accent-strong: #6d28d9;
-  --accent-wash: #f5f3ff;
-  --accent-glow: rgba(124, 58, 237, 0.25);
+  --accent: #a78bfa;
+  --accent-strong: #c4b5fd;
+  --accent-wash: rgba(167, 139, 250, 0.18);
+  --accent-glow: rgba(167, 139, 250, 0.35);
 }
 
 [data-theme="cyan"] {
-  --accent: #0284c7;
-  --accent-strong: #0369a1;
-  --accent-wash: #f0f9ff;
-  --accent-glow: rgba(2, 132, 199, 0.25);
+  --accent: #38bdf8;
+  --accent-strong: #7dd3fc;
+  --accent-wash: rgba(56, 189, 248, 0.18);
+  --accent-glow: rgba(56, 189, 248, 0.35);
 }
 
 [data-theme="emerald"] {
-  --accent: #059669;
-  --accent-strong: #047857;
-  --accent-wash: #ecfdf5;
-  --accent-glow: rgba(5, 150, 105, 0.25);
+  --accent: #34d399;
+  --accent-strong: #6ee7b7;
+  --accent-wash: rgba(52, 211, 153, 0.18);
+  --accent-glow: rgba(52, 211, 153, 0.35);
 }
 
 [data-theme="amber"] {
-  --accent: #ea580c;
-  --accent-strong: #c2410c;
-  --accent-wash: #fff7ed;
-  --accent-glow: rgba(234, 88, 12, 0.25);
+  --accent: #fbbf24;
+  --accent-strong: #fcd34d;
+  --accent-wash: rgba(251, 191, 36, 0.18);
+  --accent-glow: rgba(251, 191, 36, 0.35);
 }
 
 [data-theme="rose"] {
-  --accent: #e11d48;
-  --accent-strong: #be123c;
-  --accent-wash: #fff1f2;
-  --accent-glow: rgba(225, 29, 72, 0.25);
+  --accent: #fb7185;
+  --accent-strong: #fda4af;
+  --accent-wash: rgba(251, 113, 133, 0.18);
+  --accent-glow: rgba(251, 113, 133, 0.35);
 }
 
 @theme inline {
@@ -66,13 +69,14 @@
   --color-muted: var(--muted);
   --color-faint: var(--faint);
   --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
   --color-wash: var(--wash);
   --color-accent: var(--accent);
   --color-accent-strong: var(--accent-strong);
   --color-accent-wash: var(--accent-wash);
-  --color-danger: #ef4444;
-  --color-danger-wash: #fef2f2;
-  --color-amber-wash: #fef3c7;
+  --color-danger: #f87171;
+  --color-danger-wash: rgba(239, 68, 68, 0.18);
+  --color-amber-wash: rgba(245, 158, 11, 0.18);
   --font-sans: "Instrument Sans Variable", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Bricolage Grotesque Variable", "Instrument Sans Variable", ui-sans-serif, sans-serif;
 }
@@ -81,9 +85,9 @@ html,
 body {
   background-color: var(--color-paper);
   background-image: 
-    radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.05) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.04) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(14, 165, 233, 0.03) 0px, transparent 40%);
+    radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 55%),
+    radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.08) 0px, transparent 55%),
+    radial-gradient(at 100% 0%, rgba(14, 165, 233, 0.08) 0px, transparent 45%);
   background-attachment: fixed;
   color: var(--color-ink);
   font-family: var(--font-sans);
@@ -143,8 +147,8 @@ textarea:focus-visible {
 
 /* Glass & Card enhancements */
 .glass-card {
-  background: rgba(255, 255, 255, 0.88);
-  backdrop-filter: blur(10px);
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(14px);
   border: 1px solid var(--color-line);
 }
 
@@ -154,5 +158,5 @@ textarea:focus-visible {
 
 .card-elevated:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.06), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+  box-shadow: 0 12px 30px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
 }

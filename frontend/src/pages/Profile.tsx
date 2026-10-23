@@ -4,10 +4,10 @@ import { RoleMatrix } from "@/components/RoleMatrix";
 import { ROLE_LABEL, ROLE_SUMMARY, canEdit } from "@/lib/format";
 
 const ROLE_COLORS: Record<string, { bg: string; border: string; text: string; icon: string }> = {
-  admin: { bg: "from-purple-50 to-indigo-50", border: "border-purple-200", text: "text-purple-700", icon: "🛡️" },
-  project_manager: { bg: "from-sky-50 to-cyan-50", border: "border-sky-200", text: "text-sky-700", icon: "📋" },
-  member: { bg: "from-emerald-50 to-teal-50", border: "border-emerald-200", text: "text-emerald-700", icon: "👤" },
-  viewer: { bg: "from-slate-50 to-gray-50", border: "border-slate-200", text: "text-slate-600", icon: "👁️" },
+  admin: { bg: "from-purple-950/40 to-indigo-950/40", border: "border-purple-800/50", text: "text-purple-300", icon: "🛡️" },
+  project_manager: { bg: "from-sky-950/40 to-cyan-950/40", border: "border-sky-800/50", text: "text-sky-300", icon: "📋" },
+  member: { bg: "from-emerald-950/40 to-teal-950/40", border: "border-emerald-800/50", text: "text-emerald-300", icon: "👤" },
+  viewer: { bg: "from-slate-900/60 to-gray-900/60", border: "border-slate-800/50", text: "text-slate-300", icon: "👁️" },
 };
 
 export default function Profile() {
@@ -42,13 +42,13 @@ export default function Profile() {
               <dt className="text-muted font-medium">Access level</dt>
               <dd className="text-right max-w-xs">
                 {editable ? (
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 text-xs font-semibold text-emerald-700">
-                    <span className="size-1.5 rounded-full bg-emerald-500" />
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-950/50 border border-emerald-800/60 px-2.5 py-0.5 text-xs font-semibold text-emerald-300">
+                    <span className="size-1.5 rounded-full bg-emerald-400" />
                     Read & Write
                   </span>
                 ) : (
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-50 border border-amber-200 px-2.5 py-0.5 text-xs font-semibold text-amber-700">
-                    <span className="size-1.5 rounded-full bg-amber-500" />
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-950/50 border border-amber-800/60 px-2.5 py-0.5 text-xs font-semibold text-amber-300">
+                    <span className="size-1.5 rounded-full bg-amber-400" />
                     Read Only
                   </span>
                 )}

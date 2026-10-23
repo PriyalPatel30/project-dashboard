@@ -79,7 +79,7 @@ export default function Projects() {
                       {project.name}
                     </h2>
                     {project.isArchived && (
-                      <span className="rounded-full bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-800 border border-amber-200">
+                      <span className="rounded-full bg-amber-950/50 px-2 py-0.5 text-xs font-medium text-amber-300 border border-amber-800/60">
                         Archived
                       </span>
                     )}
