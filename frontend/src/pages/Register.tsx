@@ -7,10 +7,10 @@ import { errorMessage, ROLE_LABEL, ROLE_SUMMARY } from "@/lib/format";
 import type { Role } from "@/lib/types";
 
 const SELECTABLE_ROLES: { value: Role; label: string; hint: string }[] = [
-  { value: "admin", label: ROLE_LABEL.admin, hint: "Manage users, create/delete projects, view all projects." },
-  { value: "project_manager", label: ROLE_LABEL.project_manager, hint: "Create projects, manage teams & tasks." },
   { value: "member", label: ROLE_LABEL.member, hint: "Work on tasks in projects you belong to." },
+  { value: "project_manager", label: ROLE_LABEL.project_manager, hint: "Create projects, manage teams & tasks." },
   { value: "viewer", label: ROLE_LABEL.viewer, hint: "Read-only access to projects and tasks." },
+  { value: "admin", label: ROLE_LABEL.admin, hint: "Granted to the first system user; otherwise must be assigned by an Admin." },
 ];
 
 export default function Register() {

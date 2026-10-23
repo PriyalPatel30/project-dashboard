@@ -22,7 +22,13 @@ export const register = async (req, res) => {
     if (adminCount === 0) {
       assignedRole = "admin";
     } else {
-      const SELF_ASSIGNABLE = ["admin", "project_manager", "member", "viewer"];
+      if (requestedRole === "admin") {
+        return res.status(403).json({
+          code: "ADMIN_SELF_REGISTRATION_FORBIDDEN",
+          message: "Admin role cannot be self-registered. An existing Admin must grant Admin access.",
+        });
+      }
+      const SELF_ASSIGNABLE = ["project_manager", "member", "viewer"];
       assignedRole = SELF_ASSIGNABLE.includes(requestedRole) ? requestedRole : "member";
     }
 
@@ -46,11 +52,32 @@ export const register = async (req, res) => {
 // @route POST /api/auth/login
 export const login = async (req, res) => {
   try {
-    const { email, password, rememberMe } = req.body;
+    const { email, password, rememberMe, role: requestedRole } = req.body;
 
     const user = await User.findOne({ email });
     if (!user || !(await user.matchPassword(password))) {
       return res.status(401).json({ message: "Invalid email or password" });
+    }
+
+    // Role-based login verification:
+    // If a specific role is selected, verify that the user's account matches that role.
+    // A viewer cannot just select "admin" and log in!
+    if (requestedRole && requestedRole !== "any") {
+      if (user.role !== requestedRole) {
+        const ROLE_LABELS = {
+          admin: "Admin",
+          project_manager: "Project Manager",
+          member: "Team Member",
+          viewer: "Viewer",
+        };
+        const actualLabel = ROLE_LABELS[user.role] || user.role;
+        const requestedLabel = ROLE_LABELS[requestedRole] || requestedRole;
+
+        return res.status(403).json({
+          code: "ROLE_MISMATCH",
+          message: `Access denied: Your account is registered as "${actualLabel}", not "${requestedLabel}". A ${actualLabel} cannot log in as ${requestedLabel}.`,
+        });
+      }
     }
 
     const accessToken = generateAccessToken(user._id, user.role);

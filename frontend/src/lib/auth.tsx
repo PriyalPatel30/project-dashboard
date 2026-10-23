@@ -9,7 +9,7 @@ type Status = "loading" | "authed" | "anon";
 interface AuthContextValue {
   user: Person | null;
   status: Status;
-  login: (email: string, password: string, remember: boolean) => Promise<void>;
+  login: (email: string, password: string, remember: boolean, role?: string) => Promise<void>;
   register: (name: string, email: string, password: string, role?: string) => Promise<void>;
   logout: () => Promise<void>;
 }
@@ -96,8 +96,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   );
 
   const login = useCallback(
-    async (email: string, password: string, remember: boolean) => {
-      const { data } = await api.post("/auth/login", { email, password, rememberMe: remember });
+    async (email: string, password: string, remember: boolean, role?: string) => {
+      const { data } = await api.post("/auth/login", { email, password, rememberMe: remember, role });
       persist(data, remember);
     },
     [persist]
